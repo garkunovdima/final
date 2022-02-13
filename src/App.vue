@@ -20,7 +20,7 @@
           <button @click="logout">Logout</button>
         </span>
         <span v-if="!profileInfo.authState">
-          <button @click="$router.push('reg')">reg</button>
+          <button @click="$router.push('/reg')">reg</button>
           <button @click="loginDialogVisible = true">login</button>
         </span>
       </span>

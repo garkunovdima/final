@@ -21,7 +21,15 @@ export default {
     },
   },
   mounted() {
+    console.log(this.data.length);
+    console.log(this.data.length == 0);
+    if (this.data.length > 0) {
+      console.log("custom data");
+    } else console.log("defaul data");
     this.$store.dispatch("posts/gotPosts", this.data);
+  },
+  updated() {
+    console.log("FeedComponent updated");
   },
 };
 </script>

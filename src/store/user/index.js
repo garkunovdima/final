@@ -26,7 +26,7 @@ export default {
         profileInfo(state) {
             return {
                 userData: state.userData,
-                
+
                 name: state.name,
                 email: state.email,
                 uid: state.uid,
@@ -92,6 +92,7 @@ export default {
                     data.privateList = [];
                     data.myPosts = [];
                     data.ava = '';
+                    data.myPosts = { 0: 0 }
 
                     const db = getDatabase();
                     set(ref(db, '/users/' + data.uid), data);

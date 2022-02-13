@@ -28,16 +28,18 @@ export default {
             const db = getDatabase();
             const path = '/posts';
 
-            if (data && data != []) {
+            if (data && data.length > 1) {
                 console.log('data:', data);
                 context.commit('clear');
                 for (let i in data) {
                     console.log(`data[${i}]=${data[i]}`);
 
-                    onValue(ref(db, `/posts/${data[i]}`), (snapshot) => {
-                        const postsObject = snapshot.val();
-                        context.commit('addPost', postsObject);
-                    });
+                    if (data[i] != 0) {
+                        onValue(ref(db, `/posts/${data[i]}`), (snapshot) => {
+                            const postsObject = snapshot.val();
+                            context.commit('addPost', postsObject);
+                        });
+                    }
                 }
             } else {
                 onValue(ref(db, path), (snapshot) => {
@@ -85,7 +87,10 @@ export default {
             const db = getDatabase();
             return update(ref(db), updates)
                 .then(() => {
+                    console.log(data);
+                    const updates = {};
                     updates['/users/' + data.authorLink + '/myPosts/' + data.id] = null;
+                    const db = getDatabase();
                     update(ref(db), updates)
                 });
         }

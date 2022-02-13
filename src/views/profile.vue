@@ -34,7 +34,7 @@
         ></crud-component>
       </div>
     </div>
-    <feed-component :data="myPostsArray"></feed-component>
+    <feed-component :crudrule="crudrule" :data="myPostsArray"></feed-component>
   </div>
 </template>
 <script>
@@ -50,7 +50,6 @@ export default {
   data() {
     return {
       isCreatePostField: false,
-      crudrule: true,
       newPost: {
         header: "",
         text: "",
@@ -58,6 +57,15 @@ export default {
     };
   },
   computed: {
+    crudrule() {
+      console.log("this.profileInfo.uid", this.profileInfo.uid);
+      console.log(
+        "this.profileInfo.userData.uid",
+        this.profileInfo.userData.uid
+      );
+      if (this.profileInfo.uid === this.profileInfo.userData.uid) return true;
+      else return false;
+    },
     profileInfo() {
       return this.$store.getters["user/profileInfo"];
     },
@@ -65,23 +73,27 @@ export default {
       return this.$route.params.uid;
     },
     myPostsArray() {
-      if (this.profileInfo.userData.myPosts) {
-        const myPosts = this.profileInfo.userData.myPosts;
-        let temp = [];
+      let temp = [];
 
-        for (let key in myPosts) {
-          temp.push(myPosts[key]);
+      if (this.profileInfo.userData) {
+        if (this.profileInfo.userData.myPosts) {
+          const myPosts = this.profileInfo.userData.myPosts;
+
+          for (let key in myPosts) {
+            temp.push(myPosts[key]);
+          }
+
+          return temp;
         }
-
-        return temp;
       }
       return [];
     },
   },
   watch: {
     "$route.params.uid": function () {
-      console.log("UIDDDD: ", this.uid);
-      this.$store.dispatch("user/getUser", this.uid);
+      console.log("UIDDDD: ", this.$route.params.uid);
+      this.$store.dispatch("user/getUser", this.$route.params.uid);
+      // this.$store.dispatch("user/getUser", this.uid);
     },
   },
   methods: {
@@ -97,7 +109,8 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch("user/getUser", this.uid);
+    this.$store.dispatch("user/getUser", this.$route.params.uid);
+    // this.$store.dispatch("user/getUser", this.uid);
   },
 };
 </script>
